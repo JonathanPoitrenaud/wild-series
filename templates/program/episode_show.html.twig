@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tv Show - {{ program.title }} / Season - {{ season.number }} / Episode - {{ episode.number }}{% endblock %}
+
+{% block body %}
+    <div class="container text-center mt-3 mb-3">
+        <div class="media">
+            <h1>{{ program.title }}</h1>
+            <h2>{{ season.description }}</h2>
+            <h3>{{ episode.title }}</h3>
+            <p>{{ episode.synopsis }}</p>
+        </div>
+        <a href="{{ path('program_season_show', {program: program.id, season: season.id}) }}" class="list-group-item list-group-item-action bg-success">Back to Season {{ season.number }}</a>
+    </div>
+{% endblock %}

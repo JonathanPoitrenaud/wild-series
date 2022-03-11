@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tv Show - {{ program.title }}{% endblock %}
+
+{% block body %}
+    <div class="container text-center mt-3 mb-3">
+        <div class=" media">
+            <img class="align-self-start me-3" src="{{ program.poster }}" alt="{{ program.title }} poster">
+                <div class="media-body">
+                    <h1 class="mt-1">{{ program.title }}</h1>
+                        <p>Category : {{ program.category.name }}</p>
+                        <p>{{ program.synopsis }}</p>
+                </div>
+            <div class="list-group col-3 mx-auto mb-5">
+                {% for season in seasons %}
+                    <a href="{{ path('program_season_show', {program: program.id, season: season.id}) }}" class="list-group-item list-group-item-action">{{ season.description }}</a>
+                {% endfor %}
+            </div>
+            <div class="list-group col-3 mx-auto mb-5">
+                {% for actor in program.actors %}
+                    <a href="{{ path('actor_show', {actor: actor.id}) }}">{{ actor.name }}</a>
+                {% else %}
+                    <p>None actors for now, update soon.</p>
+                {% endfor %}
+            </div>
+            <a href="{{ path('program_index') }}" class="list-group-item list-group-item-action bg-success">Back to program's</a>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tv Show - {{ program.title }} / Season - {{ season.number }}{% endblock %}
+
+{% block body %}
+    <div class="container text-center mt-3 mb-3">
+        <div class="media">
+            <h1>{{ program.title }}</h1>
+            <h2>{{ season.description }}</h2>
+                <ul class="list-group">
+                    {% for episode in episodes %}
+                        <li class="list-group-item text-start">
+                            <p>{{ episode.title }}</p>
+                            <p><span class="text-danger">Description :</span> {{ episode.synopsis }}</p>
+                            <a href="{{ path('program_episode_show', {program: program.id, season: season.id, episode: episode.id}) }}">Episode details</a>
+                        </li>
+                    {% else %}
+                        <p>None episode for now</p>
+                    {% endfor %}
+                </ul>
+            <a href="{{ path('program_show', { program: program.id}) }}" class="list-group-item list-group-item-action bg-success">Back to {{ program.title }}</a>
+        </div>
+    </div>
+{% endblock %}

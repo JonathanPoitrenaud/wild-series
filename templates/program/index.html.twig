@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}All programs{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>All series from program table :</h1>
+
+    {% for program in programs %}
+        <div>
+            <h2>{{ loop.index }} / {{ program.title }}</h2>
+            <p>{{ program.synopsis }}</p>
+            <a href="{{ path('program_show', { program: program.id}) }}">Details</a>
+        </div>
+    {% else %}
+        No program
+    {% endfor %}
+    <div class="text-center">
+        <a href="{{ path('program_new') }}">Go add new program</a>
+    </div>
+    <div>
+        <a href="{{ path('default') }}">Home</a>
+    </div>
+</div>
+{% endblock %}

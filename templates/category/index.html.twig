@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}All categories{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>All categories !</h1>
+
+    {% for category in categories %}
+        <h2>{{ category.name }}</h2>
+        <a href="{{ path("category_show", { category: category.id }) }}">Do you like to know more?</a>
+    {% else %}
+        None category found.
+    {% endfor %}
+    <div>
+        <a href="{{ path('category_new') }}">Add new category</a>
+    </div>
+    <div>
+        <a href="{{ path('program_index') }}">Back to program</a>
+    </div>
+</div>
+{% endblock %}
