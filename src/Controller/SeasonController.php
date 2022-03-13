@@ -34,8 +34,8 @@ class SeasonController extends AbstractController
         }
 
         return $this->renderForm('season/new.html.twig', [
-            'season' => $season,
-            'form' => $form,
+            'season'    => $season,
+            'form'      => $form,
         ]);
     }
 
@@ -59,8 +59,8 @@ class SeasonController extends AbstractController
         }
 
         return $this->renderForm('season/edit.html.twig', [
-            'season' => $season,
-            'form' => $form,
+            'season'    => $season,
+            'form'      => $form,
         ]);
     }
 

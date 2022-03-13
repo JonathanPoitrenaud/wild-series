@@ -63,6 +63,33 @@ class ProgramController extends AbstractController
         ]);
     }
 
+    #[Route('{program}/edit', name: 'edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Program $program, ProgramRepository $programRepository): Response
+    {
+        $form = $this->createForm(ProgramType::class, $program);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $programRepository->add($program);
+            return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('program/edit.html.twig', [
+            'program'   => $program,
+            'form'      => $form,
+        ]);
+    }
+
+    #[Route('delete/{program}', name: 'delete', methods: ['POST'])]
+    public function deleteProgram(Request $request, Program $program, ProgramRepository $programRepository): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$program->getId(), $request->request->get('_token'))) {
+            $programRepository->remove($program);
+        }
+
+        return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
+    }
+
     #[Route('/{program}/season/{season}', name: 'season_show')]
     public function showSeason(Program $program, Season $season, ManagerRegistry $doctrine): Response
     {
