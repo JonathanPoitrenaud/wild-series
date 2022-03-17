@@ -3,24 +3,31 @@
 namespace App\DataFixtures;
 
 use App\Entity\Program;
+use App\Service\Slugify;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
 class ProgramFixtures extends Fixture implements DependentFixtureInterface
 {
+    public $slugify;
+    public function __construct(Slugify $slugify)
+    {
+        $this->slugify = $slugify;
+    }
+
     public function load(ObjectManager $manager): void
     {
-        $program = new Program();
-        $program->setTitle('Walking dead');
-        $program->setSynopsis('Dead are not so dead !');
-        $program->setPoster('https://m.media-amazon.com/images/M/MV5BZmFlMTA0MmUtNWVmOC00ZmE1LWFmMDYtZTJhYjJhNGVjYTU5XkEyXkFqcGdeQXVyMTAzMDM4MjM0._V1_.jpg');
-        $program->setCategory($this->getReference('category_0'));
-
-        for ($i=0; $i < count(ActorFixtures::ACTORS); $i++) {
-            $program->addActor($this->getReference('actor_' . $i));
-        }
-        $manager->persist($program);
+//        $program = new Program();
+//        $program->setTitle('Walking dead');
+//        $program->setSynopsis('Dead are not so dead !');
+//        $program->setPoster('https://m.media-amazon.com/images/M/MV5BZmFlMTA0MmUtNWVmOC00ZmE1LWFmMDYtZTJhYjJhNGVjYTU5XkEyXkFqcGdeQXVyMTAzMDM4MjM0._V1_.jpg');
+//        $program->setCategory($this->getReference('category_0'));
+//
+//        for ($i=0; $i < count(ActorFixtures::ACTORS); $i++) {
+//            $program->addActor($this->getReference('actor_' . $i));
+//        }
+//        $manager->persist($program);
         $manager->flush();
     }
 

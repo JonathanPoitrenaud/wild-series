@@ -19,7 +19,7 @@
             </tbody>
         </table>
         {% for program in actor.programs %}
-            <a href="{{ path('program_show', {program: program.id}) }}">{{ program.title }}</a>
+            <a href="{{ path('program_show', {slug: program.slug}) }}">{{ program.title }}</a>
         {% else %}
             error
         {% endfor %}

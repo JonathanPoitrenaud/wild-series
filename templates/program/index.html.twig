@@ -10,7 +10,7 @@
         <div>
             <h2>{{ loop.index }} / {{ program.title }}</h2>
             <p>{{ program.synopsis }}</p>
-            <a href="{{ path('program_show', { program: program.id}) }}">Details</a>
+            <a href="{{ path('program_show', {slug: program.slug}) }}">Details</a>
         </div>
     {% else %}
         No program

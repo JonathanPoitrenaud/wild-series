@@ -10,6 +10,6 @@
             <h3>{{ episode.title }}</h3>
             <p>{{ episode.synopsis }}</p>
         </div>
-        <a href="{{ path('program_season_show', {program: program.id, season: season.id}) }}" class="list-group-item list-group-item-action bg-success">Back to Season {{ season.number }}</a>
+        <a href="{{ path('program_season_show', {slug: program.slug, season: season.id}) }}" class="list-group-item list-group-item-action bg-success">Back to Season {{ season.number }}</a>
     </div>
 {% endblock %}
