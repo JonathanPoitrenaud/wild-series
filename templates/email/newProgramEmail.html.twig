@@ -1,0 +1,10 @@
+{% extends 'email/layout.html.twig' %}
+
+{% block title %}New Tv show{% endblock %}
+
+{% block body %}
+    <h1 class="text-center">{{ program.title }} create</h1>
+    <p>Hey folks, a new Tv Show {{ program.title }} was created</p>
+    <p>Description</p>
+    <p>{{ program.synopsis }}</p>
+{% endblock %}

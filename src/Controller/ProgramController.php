@@ -12,6 +12,9 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/program', name: 'program_')]
@@ -28,7 +31,7 @@ class ProgramController extends AbstractController
     }
 
     #[Route('/new', name: 'new')]
-    public function new(Request $request, ProgramRepository $programRepository, Slugify $slugify): Response
+    public function new(Request $request, ProgramRepository $programRepository, Slugify $slugify, MailerInterface $mailer): Response
     {
         $program = new Program();
         $form = $this->createForm(ProgramType::class, $program);
@@ -38,7 +41,17 @@ class ProgramController extends AbstractController
             $slug = $slugify->generate($program->getTitle());
             $program->setSlug($slug);
             $programRepository->add($program);
-            $this->addFlash('success', 'You add a new program !');
+            $email = (new Email())
+                ->from($this->getParameter('mailer_from'))
+                ->to('jonathan.poitrenaud@hotmail.com')
+                ->subject('Une nouvelle série vient d\'être publiée !')
+                ->html($this->renderView('email/newProgramEmail.html.twig', ['program' => $program]));
+            try {
+                $mailer->send($email);
+            } catch (TransportExceptionInterface $e) {
+                echo 'there is a mail error';
+                die();
+            }
 
             return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -83,7 +96,7 @@ class ProgramController extends AbstractController
         ]);
     }
 
-    #[Route('delete/{slug}', name: 'delete', methods: ['POST'])]
+    #[Route('delete/{id}', name: 'delete', methods: ['POST'])]
     public function deleteProgram(Request $request, Program $program, ProgramRepository $programRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$program->getId(), $request->request->get('_token'))) {

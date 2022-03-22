@@ -9,6 +9,8 @@ use App\Service\Slugify;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/episode')]
@@ -23,7 +25,7 @@ class EpisodeController extends AbstractController
     }
 
     #[Route('/new', name: 'episode_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EpisodeRepository $episodeRepository, Slugify $slugify): Response
+    public function new(Request $request, EpisodeRepository $episodeRepository, Slugify $slugify, MailerInterface $mailer): Response
     {
         $episode = new Episode();
         $form = $this->createForm(EpisodeType::class, $episode);
@@ -33,6 +35,13 @@ class EpisodeController extends AbstractController
             $slug = $slugify->generate($episode->getTitle());
             $episode->setSlug($slug);
             $episodeRepository->add($episode);
+            $email = (new Email())
+                ->from($this->getParameter('mailer_from'))
+                ->to('jonathan.poitrenaud@gmail.com')
+                ->subject('A new TV show was added !')
+                ->html($this->renderView('email/newEpisodeEmail.html.twig', ['episode' => $episode]));
+            $mailer->send($email);
+
             return $this->redirectToRoute('episode_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -67,7 +76,7 @@ class EpisodeController extends AbstractController
         ]);
     }
 
-    #[Route('/{slug}', name: 'episode_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'episode_delete', methods: ['POST'])]
     public function delete(Request $request, Episode $episode, EpisodeRepository $episodeRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$episode->getId(), $request->request->get('_token'))) {
